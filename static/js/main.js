@@ -8,8 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     solveButton.addEventListener('click', async () => {
         const equation = equationInput.value.trim();
+        
         if (!equation) {
             displayError("Por favor, ingresa una ecuación.");
+            addShakeAnimation(equationInput);
             return;
         }
 
@@ -49,11 +51,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     calculatorButtonsContainer.addEventListener('click', (event) => {
-        const target = event.target;
-        if (target.classList.contains('calc-btn')) {
+        const target = event.target.closest('.calc-btn');
+        
+        if (target && !target.classList.contains('empty')) {
             const value = target.dataset.value;
             const start = equationInput.selectionStart;
             const end = equationInput.selectionEnd;
+
+            addButtonPressAnimation(target);
 
             if (value === 'C') {
                 equationInput.value = '';
@@ -74,6 +79,18 @@ document.addEventListener('DOMContentLoaded', () => {
             equationInput.focus();
         }
     });
+
+    equationInput.addEventListener('input', () => {
+        hideElement(errorDisplay);
+    });
+
+    equationInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            solveButton.click();
+        }
+    });
+
 
     function formatSolution(text) {
         if (!text) return "";
@@ -103,8 +120,35 @@ document.addEventListener('DOMContentLoaded', () => {
         element.classList.add('hidden');
     }
 
+
     function displayError(message) {
         errorDisplay.textContent = message;
         showElement(errorDisplay);
+        addShakeAnimation(errorDisplay);
     }
+
+
+    function addShakeAnimation(element) {
+        element.classList.add('shake');
+        setTimeout(() => element.classList.remove('shake'), 400);
+    }
+
+
+    function addButtonPressAnimation(button) {
+        button.style.transform = 'scale(0.9)';
+        setTimeout(() => {
+            button.style.transform = '';
+        }, 150);
+    }
+ 
+    solutionOutput.innerHTML = `
+        <div style="text-align: center; color: #667eea; padding: 20px;">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom: 12px;">
+                <path d="M9 18l6-6-6-6"/>
+            </svg>
+            <p style="font-size: 16px; margin-top: 8px;">
+                Ingresa una ecuación diferencial y presiona <strong>Calcular</strong>
+            </p>
+        </div>
+    `;
 });

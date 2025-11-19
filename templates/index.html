@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,7 +7,6 @@
     <title>SmartDifferentialCalc</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     
-    <!-- OPTIMIZACIÓN: Renderizado matemático elegante -->
     <script>
     window.MathJax = {
         tex: { inlineMath: [['\\(', '\\)']] },
@@ -20,14 +20,12 @@
     <div id="container-app">
 
         <div id="app-calculator">
-            <!-- SECCIÓN DE ENTRADA -->
             <div id="calculator-container-input-user">
                 
                 <h1 class="title-app">Calculadora de Ecuaciones Diferenciales</h1>
 
                 <textarea id="equationInput" placeholder="Ej: dy/dx = y" rows="5"></textarea>
 
-                <!-- BOTONES DE LA CALCULADORA -->
                 <div id="calculatorButtons">
                     <button class="calc-btn func" data-value="sin(">sin</button>
                     <button class="calc-btn func" data-value="cos(">cos</button>
@@ -57,7 +55,7 @@
                     <button class="calc-btn" data-value="6">6</button>
                     <button class="calc-btn operator" data-value="*">*</button>
                     <button class="calc-btn operator" data-value="/">/</button>
-                    <button class="calc-btn func" data-value="sqrt(">sqrt</button>
+                    <button class="calc-btn func" data-value="sqrt(">√</button>
 
                     <button class="calc-btn" data-value="1">1</button>
                     <button class="calc-btn" data-value="2">2</button>
@@ -75,17 +73,14 @@
                 </div>
 
                 <button id="solveButton" class="btn-primary">Calcular Ecuación</button>
-                <div id="loading" class="hidden"></div>
+                <div id="loading" class="hidden">Resolviendo...</div>
                 <div id="error" class="hidden error-message"></div>
             </div>
-
-            <!-- SECCIÓN DE SALIDA -->
             <div id="solution-calculator-container-output">
                 <div id="result" class="solution-box">
 
                     <h2>Solución</h2>
 
-                    <!-- CAMBIO CRÍTICO: Usamos <div> para permitir HTML y LaTeX renderizado -->
                     <div id="solutionOutput" class="solution-text"></div>
 
                 </div>
