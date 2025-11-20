@@ -21,11 +21,18 @@ document.addEventListener('DOMContentLoaded', () => {
         solveButton.textContent = "Resolviendo ecuación...";
         solveButton.disabled = true;
 
+        const c1 = document.getElementById('initialConditionC1').value.trim();
+        const c2 = document.getElementById('initialConditionC2').value.trim();
+
         try {
             const response = await fetch('/solve_ode', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ equation: equation }),
+                body: JSON.stringify({
+                    equation: equation,
+                    c1: c1,
+                    c2: c2
+                }),
             });
 
             const data = await response.json();
@@ -88,6 +95,20 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.key === 'Enter' && !event.shiftKey) {
             event.preventDefault();
             solveButton.click();
+            return; // Exit after handling Enter
+        }
+
+        const allowedKeys = [
+            'Backspace', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Delete', 'Tab', 'Home', 'End'
+        ];
+
+        if (allowedKeys.includes(event.key) || event.ctrlKey || event.metaKey) {
+            return; // Allow control keys and shortcuts
+        }
+
+        const allowedCharsRegex = /^[a-zA-Z0-9+\-*/().\s^=]$/;
+        if (!allowedCharsRegex.test(event.key)) {
+            event.preventDefault();
         }
     });
 
