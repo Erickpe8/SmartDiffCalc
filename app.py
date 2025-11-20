@@ -23,13 +23,26 @@ def solve_ode():
 
     data = request.get_json()
     equation_str = data.get('equation')
+    c1_val = data.get('c1')
+    c2_val = data.get('c2')
 
     if not equation_str:
         return jsonify({"error": "No se proporcionó ninguna ecuación."}), 400
 
     try:
         # Preparar el prompt para DeepSeek
-        prompt = f"Resuelve la siguiente ecuación diferencial ordinaria: {equation_str}. Proporciona únicamente los pasos detallados de la solución, explicando cada uno de forma clara y concisa, sin saludos ni texto introductorio o conclusivo."
+        prompt = f"Resuelve la siguiente ecuación diferencial ordinaria: {equation_str}."
+        
+        conditions = []
+        if c1_val:
+            conditions.append(f"C1 = {c1_val}")
+        if c2_val:
+            conditions.append(f"C2 = {c2_val}")
+
+        if conditions:
+            prompt += f" Usa las siguientes condiciones iniciales o valores de constantes: {', '.join(conditions)}."
+            
+        prompt += " Proporciona únicamente los pasos detallados de la solución, explicando cada uno de forma clara y concisa, sin saludos ni texto introductorio o conclusivo."
 
         headers = {
             "Authorization": f"Bearer {DEEPSEEK_API_KEY}",
